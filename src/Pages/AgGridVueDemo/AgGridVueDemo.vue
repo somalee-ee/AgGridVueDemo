@@ -9,19 +9,44 @@
         :column-defs="columnDefs"
         :row-data="rowData"
         :page-size="50"
+        @grid-ready="onReady"
     />
 </template>
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component } from 'vue-property-decorator';
 import { AgGridVue } from 'ag-grid-vue';
 
 @Component({ components: { AgGridVue } })
 export default class InputDataGridAg extends Vue {
-    @Prop() items;
+    private items = [
+        { Id: 2, Name: '101_CT_1', Class: 'Generator' },
+        { Id: 3, Name: '101_CT_2', Class: 'Generator' },
+        { Id: 4, Name: '101_PV_1', Class: 'Generator' },
+        { Id: 5, Name: '101_PV_2', Class: 'Generator' },
+        { Id: 6, Name: '101_PV_3', Class: 'Generator' },
+        { Id: 7, Name: '101_PV_4', Class: 'Generator' },
+    ];
 
-    @Prop() headers;
+    private api = null;
 
-    @Prop() loading;
+    onGridReady(params) {
+        this.api = params.api;
+    }
+
+    private headers = [
+        {
+            text: 'ID',
+            value: 'ID',
+        },
+        {
+            text: 'Class',
+            value: 'Class',
+        },
+        {
+            text: 'Name',
+            value: 'Name',
+        },
+    ];
 
     get columnDefs() {
         return this.headers.map((header) => ({
@@ -36,7 +61,6 @@ export default class InputDataGridAg extends Vue {
     }
 
     get rowData() {
-        console.log(this.items, this.columnDefs);
         return this.items;
     }
 }
